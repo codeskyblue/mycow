@@ -6,7 +6,14 @@
 
 ### 1. 下载依赖
 ```bash
+# Linux
 ./download.sh
+
+# Mac
+brew install sing-box
+
+# Or others
+# https://sing-box.sagernet.org/installation/package-manager/
 ```
 
 ### 2. 配置订阅地址
@@ -25,7 +32,10 @@ python update_singbox.py --sub-url <订阅地址>
 ### 3. 更新并启动
 ```bash
 python update_singbox.py
-./start.sh
+./run.sh
+
+# run in background
+nohup ./run.sh &>cow.log &
 ```
 
 ## 配置说明
