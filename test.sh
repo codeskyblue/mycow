@@ -20,7 +20,7 @@ echo "Config validation passed"
 
 echo ""
 echo "=== Testing proxy connectivity ==="
-if curl -x socks5://127.0.0.1:10808 -s -o /dev/null -w "HTTP %{http_code} - %{time_total}s" --connect-timeout 10 http://www.google.com/generate_204; then
+if curl -x socks5h://127.0.0.1:10808 -s -o /dev/null -w "HTTP %{http_code} - %{time_total}s" --connect-timeout 10 http://www.google.com/generate_204; then
     echo ""
     echo "Proxy is working"
 else
