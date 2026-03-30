@@ -1,4 +1,6 @@
-# ss-redir
+# Cross Over The Wall
+
+使用singbox去做v2ray的订阅地址解析
 
 ## 快速开始
 
