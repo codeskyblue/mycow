@@ -30,7 +30,7 @@ def get_subscription_url():
 def decode_base64(data):
     missing_padding = len(data) % 4
     if missing_padding:
-        data += '=' * (4 - missing_padding)
+        data += "=" * (4 - missing_padding)
     return base64.b64decode(data)
 
 
@@ -56,16 +56,14 @@ def parse_vmess(link):
         "server": j["add"],
         "server_port": int(j["port"]),
         "uuid": j["id"],
-        "security": "auto"
+        "security": "auto",
     }
 
     if j.get("net") == "ws":
         outbound["transport"] = {
             "type": "ws",
             "path": j.get("path", "/"),
-            "headers": {
-                "Host": j.get("host", "")
-            }
+            "headers": {"Host": j.get("host", "")},
         }
 
     return outbound
@@ -81,14 +79,11 @@ def parse_vless(link):
         "tag": u.hostname,
         "server": u.hostname,
         "server_port": u.port,
-        "uuid": u.username
+        "uuid": u.username,
     }
 
     if "type" in query and query["type"][0] == "ws":
-        outbound["transport"] = {
-            "type": "ws",
-            "path": query.get("path", ["/"])[0]
-        }
+        outbound["transport"] = {"type": "ws", "path": query.get("path", ["/"])[0]}
 
     return outbound
 
@@ -111,7 +106,7 @@ def parse_ss(link):
         "server": host,
         "server_port": int(port),
         "method": method,
-        "password": password
+        "password": password,
     }
 
 
@@ -123,7 +118,7 @@ def parse_trojan(link):
         "tag": u.hostname,
         "server": u.hostname,
         "server_port": u.port,
-        "password": u.username
+        "password": u.username,
     }
 
 
@@ -159,6 +154,7 @@ def update_config(nodes):
     for i, node in enumerate(nodes):
         tag = f"node-{i}"
         node["tag"] = tag
+        # node["multiplex"] = {"enabled": True}
         tags.append(tag)
 
     config["outbounds"] = nodes + [
@@ -169,18 +165,15 @@ def update_config(nodes):
             "url": "https://www.cloudflare.com/cdn-cgi/trace",
             "interval": "3m",
             "tolerance": 50,
-            "idle_timeout": "30m"
+            "idle_timeout": "30m",
         },
         {
             "type": "selector",
             "tag": "proxy",
             "outbounds": ["auto"] + tags,
-            "default": "auto"
+            "default": "auto",
         },
-        {
-            "type": "direct",
-            "tag": "direct"
-        }
+        {"type": "direct", "tag": "direct"},
     ]
 
     with open(CONFIG_FILE, "w") as f:
@@ -188,17 +181,18 @@ def update_config(nodes):
 
 
 def reload_singbox():
-    subprocess.run(
-        ["sing-box", "check", "-c", CONFIG_FILE],
-        check=True
-    )
+    subprocess.run(["sing-box", "check", "-c", CONFIG_FILE], check=True)
 
     subprocess.run(["pkill", "-HUP", "sing-box"])
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Update sing-box config from subscription")
-    parser.add_argument("-s", "--sub-url", help="Subscription URL (overrides env and .env)")
+    parser = argparse.ArgumentParser(
+        description="Update sing-box config from subscription"
+    )
+    parser.add_argument(
+        "-s", "--sub-url", help="Subscription URL (overrides env and .env)"
+    )
     args = parser.parse_args()
 
     sub_url = args.sub_url or get_subscription_url()
