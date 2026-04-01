@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+#
 import os
 import base64
 import json
@@ -162,10 +164,18 @@ def update_config(nodes):
     config["outbounds"] = nodes + [
         {
             "type": "urltest",
-            "tag": "proxy",
+            "tag": "auto",
             "outbounds": tags,
-            "url": "http://www.gstatic.com/generate_204",
-            "interval": "5m"
+            "url": "https://www.cloudflare.com/cdn-cgi/trace",
+            "interval": "3m",
+            "tolerance": 50,
+            "idle_timeout": "30m"
+        },
+        {
+            "type": "selector",
+            "tag": "proxy",
+            "outbounds": ["auto"] + tags,
+            "default": "auto"
         },
         {
             "type": "direct",
@@ -188,7 +198,7 @@ def reload_singbox():
 
 def main():
     parser = argparse.ArgumentParser(description="Update sing-box config from subscription")
-    parser.add_argument("--sub-url", help="Subscription URL (overrides env and .env)")
+    parser.add_argument("-s", "--sub-url", help="Subscription URL (overrides env and .env)")
     args = parser.parse_args()
 
     sub_url = args.sub_url or get_subscription_url()

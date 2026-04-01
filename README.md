@@ -26,12 +26,14 @@ cp .env.example .env
 
 或通过命令行参数直接传入：
 ```bash
-python update_singbox.py --sub-url <订阅地址>
+# 先安装uv
+pip install uv
+uv run update_singbox.py --sub-url <订阅地址>
 ```
 
 ### 3. 更新并启动
 ```bash
-python update_singbox.py
+uv run update_singbox.py
 ./run.sh
 
 # run in background
@@ -48,3 +50,7 @@ nohup ./run.sh &>cow.log &
 ## 默认端口
 
 - http+socks4+socks4a+socks5: 10808
+
+## Thanks
+
+Thanks to Claude Code
